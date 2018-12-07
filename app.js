@@ -7,6 +7,7 @@ var routes = require('./routes/index');
 var data = require('./routes/data');
 var info = require('./routes/info');
 var login = require('./routes/login');
+var member = require('./routes/member');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -22,6 +23,7 @@ app.use('/', routes);
 app.use('/data', data);
 app.use('/info', info);
 app.use('/login', login);
+app.use('/member', member);
 
 app.use((req, res, next) => {
     res.status(200).json({
