@@ -17,6 +17,18 @@ router.get('/getMemberData', function (req, res) {
     })
 });
 
+router.get('/getName', function (req, res) {
+    mquery.getName().then((data) => {
+        res.json(data)
+
+    }).catch((err) => {
+        res.json(err);
+        console.log(err); 
+
+    })
+});
+
+
 router.get('/getMemberCount', function (req, res) {
     mquery.getMemberCount().then((data) => {
         res.json(data)
@@ -46,6 +58,29 @@ router.post('/add', function (req, res) {
     }).catch((err) => {
         res.json(err);
         console.log(err);
+
+    })
+});
+
+router.get('/getAnnualData', function (req, res) {
+    mquery.getAnnualData(req.query.data).then((data) => {
+        res.json(data)
+
+    }).catch((err) => {
+        res.json(err);
+        console.log(err); 
+
+    })
+});
+
+router.get('/getDatePickerData', function (req, res) {
+    console.log(req.query.start)
+    mquery.getDatePickerData(req.query.start, req.query.end).then((data) => {
+        res.json(data)
+
+    }).catch((err) => {
+        res.json(err);
+        console.log(err); 
 
     })
 });
