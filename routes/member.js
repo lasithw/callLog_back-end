@@ -73,9 +73,32 @@ router.get('/getAnnualData', function (req, res) {
     })
 });
 
+router.get('/getAnnualChart', function (req, res) {
+    mquery.getAnnualChart(req.query.data).then((data) => {
+        res.json(data)
+
+    }).catch((err) => {
+        res.json(err);
+        console.log(err); 
+
+    })
+});
+
 router.get('/getDatePickerData', function (req, res) {
-    console.log(req.query.start)
+    // console.log(req.query.start)
     mquery.getDatePickerData(req.query.start, req.query.end).then((data) => {
+        res.json(data)
+
+    }).catch((err) => {
+        res.json(err);
+        console.log(err); 
+
+    })
+});
+
+router.get('/getDatePickerChart', function (req, res) {
+    // console.log(req.query.start)
+    mquery.getDatePickerChart(req.query.start, req.query.end).then((data) => {
         res.json(data)
 
     }).catch((err) => {

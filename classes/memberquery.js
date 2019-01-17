@@ -95,10 +95,31 @@ var data = {
 
     getAnnualData(data) {
         return new Promise((resolve, reject) => {
-            var sql = `SELECT member.number, member.name, COUNT(CASE WHEN call_log.callType="incoming" THEN 1 END) AS incoming, COUNT(CASE WHEN call_log.callType="outgoing" THEN 1 END) AS outgoing, call_log.date
+            var sql = `SELECT member.number, member.name, COUNT(CASE WHEN call_log.callType="incoming" THEN 1 END) AS incoming, COUNT(CASE WHEN call_log.callType="outgoing" THEN 1 END) AS outgoing, SUBSTRING_INDEX(call_log.date, '-', `+data+`) AS date
                         FROM member,call_log 
                         WHERE call_log.agent = member.name 
                         GROUP BY member.name, SUBSTRING_INDEX(date, '-', `+data+`)`;
+            con.query(sql, data, (err, rows) => {
+                if (err) {
+                    console.log(err);
+                    reject(err)
+                }
+                else {
+                    if (rows.length > 0) {
+                        resolve(rows);
+                        // console.log("callData");
+                    }
+                }
+            })
+        })
+    },
+
+    getAnnualChart(data) {
+        return new Promise((resolve, reject) => {
+            var sql = `SELECT member.number, member.name, COUNT(CASE WHEN call_log.callType="incoming" THEN 1 END) AS incoming, COUNT(CASE WHEN call_log.callType="outgoing" THEN 1 END) AS outgoing,SUBSTRING_INDEX(call_log.date, '-', `+data+`) AS date
+                        FROM member,call_log 
+                        WHERE call_log.agent = member.name 
+                        GROUP BY SUBSTRING_INDEX(date, '-', `+data+`)`;
             con.query(sql, data, (err, rows) => {
                 if (err) {
                     console.log(err);
@@ -119,7 +140,7 @@ var data = {
             var sql = `SELECT member.number, member.name, COUNT(CASE WHEN call_log.callType="incoming" THEN 1 END) AS incoming, COUNT(CASE WHEN call_log.callType="outgoing" THEN 1 END) AS outgoing, call_log.date
                         FROM member,call_log 
                         WHERE call_log.agent = member.name AND call_log.date BETWEEN '`+start+`' AND '`+end+`'
-                        GROUP BY member.name
+                        GROUP BY member.name, call_log.date
                         ORDER BY STR_TO_DATE(call_log.date, '%Y-%m-%d')`;
             con.query(sql, data, (err, rows) => {
                 if (err) {
@@ -129,7 +150,29 @@ var data = {
                 else {
                     if (rows.length > 0) {
                         resolve(rows);
-                        console.log(rows);
+                        // console.log(rows);
+                    }
+                }
+            })
+        })
+    },
+
+    getDatePickerChart(start,end) {
+        return new Promise((resolve, reject) => {
+            var sql = `SELECT member.number, member.name, COUNT(CASE WHEN call_log.callType="incoming" THEN 1 END) AS incoming, COUNT(CASE WHEN call_log.callType="outgoing" THEN 1 END) AS outgoing, call_log.date
+                        FROM member,call_log 
+                        WHERE call_log.agent = member.name AND call_log.date BETWEEN '`+start+`' AND '`+end+`'
+                        GROUP BY date
+                        ORDER BY STR_TO_DATE(call_log.date, '%Y-%m-%d')`;
+            con.query(sql, data, (err, rows) => {
+                if (err) {
+                    console.log(err);
+                    reject(err)
+                }
+                else {
+                    if (rows.length > 0) {
+                        resolve(rows);
+                        // console.log(rows);
                     }
                 }
             })
