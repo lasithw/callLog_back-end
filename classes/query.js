@@ -147,7 +147,41 @@ var data = {
                 }
             })
         })
-    }
+    },
+
+    getCheckbox() {
+        return new Promise((resolve, reject) => {
+            var sql = 'SELECT * FROM check_box';
+            con.query(sql, (err, rows) => {
+                if (err) {
+                    console.log(err);
+                    reject(err)
+                }
+                else {
+                    if (rows.length > 0) {
+                        resolve(rows);
+                        // console.log("callData");
+                    }
+                }
+            })
+        })
+    },
+
+    addCheckbox: (main_category, category) => {
+        return new Promise((resolve, reject) => {
+            var sql = "INSERT INTO check_box(main_category, category ) VALUES ('" + main_category + "','" + category + "')";
+            var param = [main_category, category];
+
+            con.query(sql, param, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    resolve(false);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    },
 
 }
 

@@ -90,4 +90,27 @@ router.get('/login', function (req, res) {
     })
 });
 
+router.get('/getCheckbox', function (req, res) {
+    query.getCheckbox().then((data) => {
+        res.json(data)
+
+    }).catch((err) => {
+        res.json(err);
+        console.log(err);
+
+    })
+});
+
+router.post('/addCheckbox', function (req, res) {
+    query.addCheckbox(req.body.main_category, req.body.category).then((data) => {
+        res.json(data);
+
+    }).catch((err) => {
+        res.json(err);
+        console.log(err);
+
+    })
+});
+
+
 module.exports = router;
